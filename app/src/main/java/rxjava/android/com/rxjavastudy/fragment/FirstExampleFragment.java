@@ -1,7 +1,8 @@
 package rxjava.android.com.rxjavastudy.fragment;
 
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -122,22 +123,19 @@ public class FirstExampleFragment extends Fragment {
                 .subscribe(new Observer<List<AppInfo>>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(getActivity(), "Here is the list!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Here is the list!", Toast.LENGTH_LONG)
+                                .show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if (e == null) {
-                            Log.e(TAG, "onError: throwable is null");
-                        }
-                        Log.e(TAG, "onError: " + e.getMessage());
-                        Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_LONG)
+                                .show();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onNext(List<AppInfo> appInfos) {
-                        Log.d(TAG, "onNext: observer receive msg, appInfos size=" + appInfos.size());
                         mRecyclerView.setVisibility(View.VISIBLE);
                         mAdapter.addApplications(appInfos);
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -149,14 +147,14 @@ public class FirstExampleFragment extends Fragment {
         return Observable.create(new Observable.OnSubscribe<AppInfo>() {
             @Override
             public void call(Subscriber<? super AppInfo> subscriber) {
-                List<AppInfoRich> apps = new ArrayList<AppInfoRich>();
-                final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                PackageManager pm = getActivity().getPackageManager();
+                List<PackageInfo> packages = pm.getInstalledPackages(0);
 
-                List<ResolveInfo> infos = getActivity().getPackageManager()
-                        .queryIntentActivities(mainIntent, 0);
-                for (ResolveInfo ri : infos) {
-                    apps.add(new AppInfoRich(getActivity(), ri));
+                List<AppInfoRich> apps = new ArrayList<>();
+                for (PackageInfo pi : packages) {
+                    if ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                        apps.add(new AppInfoRich(getActivity(), pi));
+                    }
                 }
 
                 for (AppInfoRich appInfoRich : apps) {
@@ -168,10 +166,8 @@ public class FirstExampleFragment extends Fragment {
                     if (subscriber.isUnsubscribed()) {
                         return;
                     }
-                    Log.d(TAG, "call: name=" + name + ", icon=" + iconPath);
                     subscriber.onNext(new AppInfo(name, iconPath, appInfoRich.getLastUpdateTime()));
                 }
-
                 if (!subscriber.isUnsubscribed()) {
                     subscriber.onCompleted();
                 }

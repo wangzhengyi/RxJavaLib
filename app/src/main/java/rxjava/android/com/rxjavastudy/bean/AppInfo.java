@@ -42,4 +42,9 @@ public class AppInfo implements Comparable<Object> {
         AppInfo anotherApp = (AppInfo)o;
         return getName().compareTo(anotherApp.getName());
     }
+
+    @Override
+    public String toString() {
+        return this.getName() + ":" + this.getIcon() + ":" + this.getLastUpdateTime();
+    }
 }
