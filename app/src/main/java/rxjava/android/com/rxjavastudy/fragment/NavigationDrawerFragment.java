@@ -103,7 +103,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mFragmentContainerView = getActivity().findViewById(R.id.fragment_drawer);
         mDrawerLayout = drawerLayout;
         mDrawerLayout.setStatusBarBackgroundColor(getResources().getColor(R.color.myPrimaryColor));
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, toolbar,
+                R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -124,7 +125,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
                     saveSharedSetting(getActivity(), PREF_USER_LEARNED_DRAWER, "true");
                 }
                 getActivity().invalidateOptionsMenu();
-             }
+            }
         };
 
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
@@ -148,9 +149,47 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     private List<NavigationItem> getMenu() {
         List<NavigationItem> items = new ArrayList<>();
-        items.add(new NavigationItem("Example 1", getResources().getDrawable(R.drawable.ic_action_android)));
-        items.add(new NavigationItem("Example 2", getResources().getDrawable(R.drawable.ic_action_android)));
-        items.add(new NavigationItem("Example 3", getResources().getDrawable(R.drawable.ic_action_android)));
+        items.add(new NavigationItem("Example 1", getResources()
+                .getDrawable(R.drawable.ic_action_android)));
+        items.add(new NavigationItem("Example 2", getResources()
+                .getDrawable(R.drawable.ic_action_android)));
+        items.add(new NavigationItem("Example 3", getResources()
+                .getDrawable(R.drawable.ic_action_android)));
+
+        items.add(new NavigationItem("Filter", getResources()
+                .getDrawable(R.drawable.ic_action_filter)));
+        items.add(new NavigationItem("Take and TakeLast", getResources()
+                .getDrawable(R.drawable.ic_action_filter)));
+        items.add(new NavigationItem("Distinct abd DistinctUntilChanged", getResources()
+                .getDrawable(R.drawable.ic_action_filter)));
+
+        items.add(new NavigationItem("Map", getResources()
+                .getDrawable(R.drawable.ic_action_wizard)));
+        items.add(new NavigationItem("Scan", getResources()
+                .getDrawable(R.drawable.ic_action_wizard)));
+        items.add(new NavigationItem("GroupBy", getResources()
+                .getDrawable(R.drawable.ic_action_wizard)));
+
+        items.add(new NavigationItem("Merge", getResources()
+                .getDrawable(R.drawable.ic_action_process_save)));
+        items.add(new NavigationItem("Zip", getResources()
+                .getDrawable(R.drawable.ic_action_process_save)));
+        items.add(new NavigationItem("Join", getResources()
+                .getDrawable(R.drawable.ic_action_process_save)));
+        items.add(new NavigationItem("CombineLatest", getResources()
+                .getDrawable(R.drawable.ic_action_process_save)));
+        items.add(new NavigationItem("And Then When", getResources()
+                .getDrawable(R.drawable.ic_action_process_save)));
+
+        items.add(new NavigationItem("SharedPreferences", getResources()
+                .getDrawable(R.drawable.ic_action_playback_schuffle)));
+        items.add(new NavigationItem("Long task", getResources()
+                .getDrawable(R.drawable.ic_action_playback_schuffle)));
+        items.add(new NavigationItem("Network task", getResources()
+                .getDrawable(R.drawable.ic_action_playback_schuffle)));
+
+        items.add(new NavigationItem("Stack Overflow", getResources()
+                .getDrawable(R.drawable.ic_action_android)));
         return items;
     }
 
@@ -162,7 +201,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
-        ((NavigationDrawerAdapter)mDrawerList.getAdapter()).selectPosition(position);
+        ((NavigationDrawerAdapter) mDrawerList.getAdapter()).selectPosition(position);
     }
 
     public void openDrawer() {

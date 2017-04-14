@@ -1,4 +1,4 @@
-package rxjava.android.com.rxjavastudy.fragment;
+package rxjava.android.com.rxjavastudy.chapter3;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -7,9 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-import rxjava.android.com.rxjavastudy.fragment.FirstExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter3.FirstExampleFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
-import rxjava.android.com.rxjavastudy.fragment.SecondExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter3.SecondExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter3.ThirdExampleFragment;
 import rxjava.android.com.rxjavastudy.interfaces.NavigationDrawerCallbacks;
 
 
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .replace(R.id.container, new SecondExampleFragment())
                         .commit();
             default:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new ThirdExampleFragment())
+                        .commit();
                 break;
         }
     }

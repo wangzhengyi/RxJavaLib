@@ -1,8 +1,7 @@
-package rxjava.android.com.rxjavastudy.fragment;
+package rxjava.android.com.rxjavastudy.chapter3;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
