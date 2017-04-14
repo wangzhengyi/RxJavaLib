@@ -1,4 +1,5 @@
-package rxjava.android.com.rxjavastudy.chapter3;
+package rxjava.android.com.rxjavastudy.chapter4;
+
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,21 +21,22 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rxjava.android.com.rxjavastudy.R;
 import rxjava.android.com.rxjavastudy.adapter.ApplicationAdapter;
 import rxjava.android.com.rxjavastudy.bean.AppInfo;
 import rxjava.android.com.rxjavastudy.bean.ApplicationsList;
 
-public class ThirdExampleFragment extends Fragment {
-    private static final String TAG = ThirdExampleFragment.class.getSimpleName();
+public class TakeExampleFragment extends Fragment {
+    private static final String TAG = FilterExampleFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ApplicationAdapter mAdapter;
-    private List<AppInfo> mAddedApps = new ArrayList<>();
+    private ArrayList<AppInfo> mAddedApps = new ArrayList<>();
 
-    public ThirdExampleFragment() {
+    public TakeExampleFragment() {
+        // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,9 +47,9 @@ public class ThirdExampleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_example, container, false);
-        mSwipeRefreshLayout = (SwipeRefreshLayout)
-                view.findViewById(R.id.fg_swipe_refresh_container);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_list);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view
+                .findViewById(R.id.fg_swipe_refresh_container);
         return view;
     }
 
@@ -98,28 +100,25 @@ public class ThirdExampleFragment extends Fragment {
     private void loadData() {
         mAddedApps.clear();
         List<AppInfo> apps = ApplicationsList.getInstance().getList();
-        AppInfo appOne = apps.get(0);
-        AppInfo appTwo = apps.get(1);
-        AppInfo appThree = apps.get(2);
-        loadApps(appOne, appTwo, appThree);
-        testRangeOperator();
+        loadApps(apps);
     }
 
-    private void loadApps(AppInfo appOne, AppInfo appTwo, AppInfo appThree) {
+    private void loadApps(List<AppInfo> apps) {
         mRecyclerView.setVisibility(View.VISIBLE);
-        Observable.just(appOne, appTwo, appThree)
-                .repeat(3)
+        Observable.from(apps)
+                .takeLast(3)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<AppInfo>() {
                     @Override
                     public void onCompleted() {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(getActivity(), "Here is third fragment list!",
+                        Toast.makeText(getActivity(), "Here is filter fragment list!",
                                 Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e(TAG, "onError: e=" + e.getMessage());
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(getActivity(), "Something went wrong!",
                                 Toast.LENGTH_LONG).show();
@@ -129,28 +128,6 @@ public class ThirdExampleFragment extends Fragment {
                     public void onNext(AppInfo appInfo) {
                         mAddedApps.add(appInfo);
                         mAdapter.addApplications(mAddedApps);
-                    }
-                });
-    }
-
-    private void testRangeOperator() {
-        Observable.range(10, 3)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<Integer>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, "onError: Something went wrong");
-                    }
-
-                    @Override
-                    public void onNext(Integer integer) {
-                        String text = "I say " + integer;
-                        Log.i(TAG, "onNext: " + text);
                     }
                 });
     }

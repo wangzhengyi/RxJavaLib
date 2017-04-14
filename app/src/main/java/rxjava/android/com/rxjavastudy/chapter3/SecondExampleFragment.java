@@ -83,6 +83,7 @@ public class SecondExampleFragment extends Fragment {
     }
 
     private void loadAppData() {
+        mAddedApps.clear();
         List<AppInfo> apps = ApplicationsList.getInstance().getList();
         loadList(apps);
     }
@@ -110,7 +111,7 @@ public class SecondExampleFragment extends Fragment {
                     @Override
                     public void onNext(AppInfo appInfo) {
                         mAddedApps.add(appInfo);
-                        mAdapter.addApplication(mAddedApps.size() - 1, appInfo);
+                        mAdapter.addApplications(mAddedApps);
                     }
                 });
     }
