@@ -3,6 +3,7 @@ package rxjava.android.com.rxjavastudy.adapter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import rxjava.android.com.rxjavastudy.R;
 import rxjava.android.com.rxjavastudy.bean.AppInfo;
 
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ViewHolder> {
+    private static final String TAG = ApplicationAdapter.class.getSimpleName();
     private List<AppInfo> mApplications;
     private int mRowLayout;
 
@@ -37,23 +39,21 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         if (position < 0) {
             position = 0;
         }
-        if (position >= mApplications.size()) {
-            position = mApplications.size() - 1;
-        }
+
         mApplications.add(position, appInfo);
         notifyItemInserted(position);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.applications_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(mRowLayout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final AppInfo appInfo = mApplications.get(position);
+        Log.e(TAG, "onBindViewHolder: name=" + appInfo.getName() + ", icon=" + appInfo.getIcon());
         holder.name.setText(appInfo.getName());
         final ViewHolder tHolder = holder;
         getBitmap(appInfo.getIcon())

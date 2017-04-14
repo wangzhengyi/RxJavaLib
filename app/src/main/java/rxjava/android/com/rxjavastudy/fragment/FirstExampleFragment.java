@@ -49,7 +49,11 @@ public class FirstExampleFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_example, container, false);
+        View view = inflater.inflate(R.layout.fragment_example, container, false);
+        mSwipeRefreshLayout = (SwipeRefreshLayout)
+                view.findViewById(R.id.fg_swipe_refresh_container);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_list);
+        return view;
     }
 
     @Override
@@ -60,9 +64,6 @@ public class FirstExampleFragment extends Fragment {
     }
 
     private void initView() {
-        mSwipeRefreshLayout = (SwipeRefreshLayout) getActivity()
-                .findViewById(R.id.fragment_first_example_swipe_container);
-        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.fragment_first_example_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.applications_list_item);
         mRecyclerView.setAdapter(mAdapter);
@@ -74,7 +75,7 @@ public class FirstExampleFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Log.d(TAG, "onRefresh: is called");
+                mSwipeRefreshLayout.setRefreshing(true);
                 refreshTheList();
             }
         });
@@ -82,7 +83,7 @@ public class FirstExampleFragment extends Fragment {
 
     private void initData() {
         // Progress
-        mSwipeRefreshLayout.setEnabled(false);
+        mSwipeRefreshLayout.setEnabled(true);
         mSwipeRefreshLayout.setRefreshing(true);
         mRecyclerView.setVisibility(View.GONE);
 
@@ -123,8 +124,8 @@ public class FirstExampleFragment extends Fragment {
                 .subscribe(new Observer<List<AppInfo>>() {
                     @Override
                     public void onCompleted() {
-                        Toast.makeText(getActivity(), "Here is the list!", Toast.LENGTH_LONG)
-                                .show();
+                        Toast.makeText(getActivity(), "Here is the first fragment list!",
+                                Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -160,8 +161,8 @@ public class FirstExampleFragment extends Fragment {
                 for (AppInfoRich appInfoRich : apps) {
                     Bitmap icon = Utils.drawableToBitmap(appInfoRich.getIcon());
                     String name = appInfoRich.getName();
-                    String iconPath = mFilesDir + "/" + name;
-                    Utils.storeBitmap(getActivity(), icon, name);
+                    String iconPath = mFilesDir.getAbsolutePath() + "/" + name;
+                    Utils.storeBitmap(getActivity(), icon, iconPath);
 
                     if (subscriber.isUnsubscribed()) {
                         return;

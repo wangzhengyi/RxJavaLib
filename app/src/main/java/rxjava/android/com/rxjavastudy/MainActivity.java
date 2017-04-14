@@ -9,6 +9,7 @@ import android.view.Menu;
 
 import rxjava.android.com.rxjavastudy.fragment.FirstExampleFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
+import rxjava.android.com.rxjavastudy.fragment.SecondExampleFragment;
 import rxjava.android.com.rxjavastudy.interfaces.NavigationDrawerCallbacks;
 
 
@@ -54,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .replace(R.id.container, new FirstExampleFragment())
                         .commit();
                 break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new SecondExampleFragment())
+                        .commit();
             default:
                 break;
         }
