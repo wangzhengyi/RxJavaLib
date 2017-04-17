@@ -4,6 +4,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import rxjava.android.com.rxjavastudy.App;
 import rxjava.android.com.rxjavastudy.utils.Utils;
 
 public class ApplicationsList {
+
+    private static final String TAG = ApplicationsList.class.getSimpleName();
 
     private static class SingletonHolder {
         public static ApplicationsList sInstance = new ApplicationsList();

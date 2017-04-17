@@ -53,8 +53,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final AppInfo appInfo = mApplications.get(position);
-        Log.e(TAG, "onBindViewHolder: name=" + appInfo.getName() + ", icon=" + appInfo.getIcon());
-        holder.name.setText(appInfo.getName());
+        holder.name.setText(appInfo.getName() + ":" + appInfo.getDate());
         final ViewHolder tHolder = holder;
         getBitmap(appInfo.getIcon())
                 .subscribeOn(Schedulers.io())

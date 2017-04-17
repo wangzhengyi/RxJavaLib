@@ -2,6 +2,9 @@ package rxjava.android.com.rxjavastudy.bean;
 
 import android.support.annotation.NonNull;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class AppInfo implements Comparable<Object> {
     private long lastUpdateTime;
     private String name;
@@ -46,5 +49,10 @@ public class AppInfo implements Comparable<Object> {
     @Override
     public String toString() {
         return this.getName() + ":" + this.getIcon() + ":" + this.getLastUpdateTime();
+    }
+
+    public String getDate() {
+        SimpleDateFormat formater = new SimpleDateFormat("MM/yyyy");
+        return formater.format(new Date(this.getLastUpdateTime()));
     }
 }

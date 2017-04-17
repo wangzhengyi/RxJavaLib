@@ -8,12 +8,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import rxjava.android.com.rxjavastudy.chapter3.FirstExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter3.SecondExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter3.ThirdExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter4.DistinctExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter4.FilterExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter4.TakeExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter5.GroupByExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter5.MapExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter5.ScanExampleFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
-import rxjava.android.com.rxjavastudy.chapter3.SecondExampleFragment;
-import rxjava.android.com.rxjavastudy.chapter3.ThirdExampleFragment;
 import rxjava.android.com.rxjavastudy.interfaces.NavigationDrawerCallbacks;
 
 
@@ -83,6 +86,22 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new DistinctExampleFragment())
                         .commit();
+                break;
+            case 6:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new MapExampleFragment())
+                        .commit();
+                break;
+            case 7:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new ScanExampleFragment())
+                        .commit();
+                break;
+            case 8:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new GroupByExampleFragment())
+                        .commit();
+                break;
             default:
                 break;
         }

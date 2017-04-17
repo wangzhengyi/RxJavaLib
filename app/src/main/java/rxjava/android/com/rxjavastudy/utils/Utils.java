@@ -5,18 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by zhengyi.wzy on 2017/4/11.
- */
-
 public class Utils {
+    private static final String TAG = Utils.class.getSimpleName();
+
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable)drawable).getBitmap();
@@ -42,11 +42,11 @@ public class Utils {
     private static void blockingStoreBitmap(Context context, Bitmap bitmap, String filename) {
         FileOutputStream fout = null;
         try {
-            fout = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            fout =  new FileOutputStream(new File(filename), true);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fout);
             fout.flush();
         } catch (Exception e) {
-
+            Log.e(TAG, "blockingStoreBitmap: " + e.getMessage());
         } finally {
             if (fout != null) {
                 try {
