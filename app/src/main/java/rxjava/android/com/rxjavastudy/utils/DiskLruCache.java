@@ -1,15 +1,20 @@
 package rxjava.android.com.rxjavastudy.utils;
 
+import android.support.annotation.NonNull;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -325,6 +330,46 @@ public class DiskLruCache implements Closeable {
 
     }
 
+    public Editor edit(String key) throws IOException {
+        return edit(key, ANY_SEQUENCE_NUMBER);
+    }
+
+    private synchronized Editor edit(String key, long expectedSequenceNumber) throws IOException {
+        checkNotClosed();
+        validateKey(key);
+        Entry entry = lruEntries.get(key);
+        if (expectedSequenceNumber != ANY_SEQUENCE_NUMBER
+                && (entry == null || entry.sequenceNumber != expectedSequenceNumber)) {
+            return null;    // snapshot is stale
+        }
+        if (entry == null) {
+            entry = new Entry(key);
+            lruEntries.put(key, entry);
+        } else if (entry.currentEditor != null) {
+            return null;    // another edit is in progress
+        }
+
+        Editor editor = new Editor(entry);
+        entry.currentEditor = editor;
+
+        journalWriter.write(DIRTY + ' ' + key + '\n');
+        journalWriter.flush();
+        return editor;
+    }
+
+    private void checkNotClosed() {
+        if (journalWriter == null) {
+            throw new IllegalStateException("cache is closed");
+        }
+    }
+
+    private void validateKey(String key) {
+        if (key.contains(" ") || key.contains("\n") || key.contains("\r")) {
+            throw new IllegalArgumentException(
+                    "keys must not contain spaces or newlines: \"" + key + "\"");
+        }
+    }
+
     /**
      * Edits the values for an entry.
      */
@@ -355,6 +400,58 @@ public class DiskLruCache implements Closeable {
         public String getString(int index) throws IOException {
             InputStream in = newInputStream(index);
             return in != null ? inputStreamToString(in) : null;
+        }
+
+        public OutputStream newOutputStream(int index) throws IOException {
+            synchronized (DiskLruCache.this) {
+                if (entry.currentEditor != this) {
+                    throw new IllegalStateException();
+                }
+                return new FaultHidingOutputStream(new FileOutputStream(entry.getDirtyFile(index)));
+            }
+        }
+
+
+        private class FaultHidingOutputStream extends FilterOutputStream {
+            public FaultHidingOutputStream(OutputStream out) {
+                super(out);
+            }
+
+            @Override
+            public void write(int oneByte){
+                try {
+                    out.write(oneByte);
+                } catch (IOException e) {
+                    hasErrors = true;
+                }
+            }
+
+            @Override
+            public void write(byte[] buffer, int offset, int length) {
+                try {
+                    out.write(buffer, offset, length);
+                } catch (IOException e) {
+                    hasErrors = true;
+                }
+            }
+
+            @Override
+            public void close() {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    hasErrors = true;
+                }
+            }
+
+            @Override
+            public void flush() {
+                try {
+                    out.flush();
+                } catch (IOException e) {
+                    hasErrors = true;
+                }
+            }
         }
     }
 

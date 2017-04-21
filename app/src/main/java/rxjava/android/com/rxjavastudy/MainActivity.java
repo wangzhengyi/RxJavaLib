@@ -16,6 +16,8 @@ import rxjava.android.com.rxjavastudy.chapter4.TakeExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter5.GroupByExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter5.MapExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter5.ScanExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter6.AndThenWhenExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter6.CombineLatestExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.JoinExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.MergeExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.ZipExampleFragment;
@@ -118,6 +120,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             case 11:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new JoinExampleFragment())
+                        .commit();
+                break;
+            case 12:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new CombineLatestExampleFragment())
+                        .commit();
+                break;
+            case 13:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new AndThenWhenExampleFragment())
                         .commit();
                 break;
             default:
