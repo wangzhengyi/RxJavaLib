@@ -41,7 +41,7 @@ public class JoinExampleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_example, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.fg_list);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_swipe_refresh_container);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_refresh_container);
         return view;
     }
 
@@ -54,7 +54,7 @@ public class JoinExampleFragment extends Fragment {
 
     private void initView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.applications_list_item);
+        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.apps_list_item);
         recyclerView.setAdapter(mAdapter);
 
         swipeRefreshLayout.setEnabled(false);

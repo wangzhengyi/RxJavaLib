@@ -1,7 +1,6 @@
 package rxjava.android.com.rxjavastudy.chapter5;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -45,7 +44,7 @@ public class MapExampleFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_example, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_list);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_swipe_refresh_container);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_refresh_container);
         return view;
     }
 
@@ -58,7 +57,7 @@ public class MapExampleFragment extends Fragment {
 
     private void initView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.applications_list_item);
+        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.apps_list_item);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.myPrimaryColor));

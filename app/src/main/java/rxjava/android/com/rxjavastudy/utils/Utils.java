@@ -16,6 +16,8 @@ import rx.schedulers.Schedulers;
 
 public class Utils {
     private static final String TAG = Utils.class.getSimpleName();
+    public static final String SP_FILE_NAME = "apps";
+    public static final String SP_APPS_KEY = "APPS";
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {

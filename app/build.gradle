@@ -35,4 +35,5 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.0'
     testCompile 'junit:junit:4.12'
     compile 'io.reactivex:rxjava-joins:0.22.0'
+    compile 'com.google.code.gson:gson:2.2.4'
 }

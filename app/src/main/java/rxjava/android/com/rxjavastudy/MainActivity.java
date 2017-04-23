@@ -21,6 +21,8 @@ import rxjava.android.com.rxjavastudy.chapter6.CombineLatestExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.JoinExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.MergeExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.ZipExampleFragment;
+import rxjava.android.com.rxjavastudy.chapter7.LongTaskFragment;
+import rxjava.android.com.rxjavastudy.chapter7.SharedPreferencesListFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
 import rxjava.android.com.rxjavastudy.interfaces.NavigationDrawerCallbacks;
 
@@ -132,6 +134,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .replace(R.id.container, new AndThenWhenExampleFragment())
                         .commit();
                 break;
+            case 14:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new SharedPreferencesListFragment())
+                        .commit();
+                break;
+            case 15:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new LongTaskFragment())
+                        .commit();
             default:
                 break;
         }

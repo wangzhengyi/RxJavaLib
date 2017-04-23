@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +48,7 @@ public class GroupByExampleFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_example, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.fg_list);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_swipe_refresh_container);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_refresh_container);
         return view;
     }
 
@@ -62,7 +61,7 @@ public class GroupByExampleFragment extends Fragment {
 
     private void initView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.applications_list_item);
+        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.apps_list_item);
         mRecyclerView.setAdapter(mAdapter);
 
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.myPrimaryColor));

@@ -45,7 +45,7 @@ public class CombineLatestExampleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_example, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_swipe_refresh_container);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fg_refresh_container);
         recyclerView = (RecyclerView) view.findViewById(R.id.fg_list);
         return view;
     }
@@ -59,7 +59,7 @@ public class CombineLatestExampleFragment extends Fragment {
                 TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.applications_list_item);
+        mAdapter = new ApplicationAdapter(new ArrayList<AppInfo>(), R.layout.apps_list_item);
         recyclerView.setAdapter(mAdapter);
 
         swipeRefreshLayout.setRefreshing(true);
