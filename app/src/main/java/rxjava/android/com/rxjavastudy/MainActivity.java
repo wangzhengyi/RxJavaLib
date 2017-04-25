@@ -22,6 +22,7 @@ import rxjava.android.com.rxjavastudy.chapter6.JoinExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.MergeExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter6.ZipExampleFragment;
 import rxjava.android.com.rxjavastudy.chapter7.LongTaskFragment;
+import rxjava.android.com.rxjavastudy.chapter7.NetworkTaskFragment;
 import rxjava.android.com.rxjavastudy.chapter7.SharedPreferencesListFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
 import rxjava.android.com.rxjavastudy.interfaces.NavigationDrawerCallbacks;
@@ -143,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new LongTaskFragment())
                         .commit();
+                break;
+            case 16:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new NetworkTaskFragment())
+                        .commit();
+                break;
             default:
                 break;
         }

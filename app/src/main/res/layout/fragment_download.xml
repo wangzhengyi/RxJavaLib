@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#214193"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <com.github.wzy.progress.ArcProgress
+        android:id="@+id/arc_progress"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="#214193"
+        android:layout_gravity="center_horizontal"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:id="@+id/button_download"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="@dimen/bt_height"
+            android:textColor="#FF0000000"
+            android:text="@string/download"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
+
+    </LinearLayout>
+
+</LinearLayout>
