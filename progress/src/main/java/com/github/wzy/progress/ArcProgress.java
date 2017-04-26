@@ -229,7 +229,6 @@ public class ArcProgress extends View {
     }
 
     private void drawBottomText(Canvas canvas) {
-        Log.e(TAG, "drawBottomText: " + mArcBottomText);
         if (!TextUtils.isEmpty(mArcBottomText)) {
             mTextPaint.setTextSize(mArcBottomTextSize);
             mTextPaint.setTextAlign(Paint.Align.CENTER);

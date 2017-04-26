@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_weight="0.4"
             android:layout_height="@dimen/bt_height"
-            android:textColor="#FF0000000"
+            android:textColor="#FF000000"
             android:text="@string/download"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"/>
 
