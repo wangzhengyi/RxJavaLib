@@ -190,6 +190,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         items.add(new NavigationItem("Stack Overflow", getResources()
                 .getDrawable(R.drawable.ic_action_android)));
+
+        items.add(new NavigationItem("Photo Wall", getResources()
+                .getDrawable(R.drawable.ic_action_android)));
         return items;
     }
 
