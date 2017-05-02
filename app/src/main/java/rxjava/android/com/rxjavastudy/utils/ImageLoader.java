@@ -74,6 +74,7 @@ public class ImageLoader {
         };
 
         File file = getDiskCacheDir(context, DISK_CACHE_DIR_NAME);
+        Log.i(TAG, "ImageLoader: file path=" + file.getAbsolutePath());
         if (!file.exists()) {
             //noinspection ResultOfMethodCallIgnored
             file.mkdirs();

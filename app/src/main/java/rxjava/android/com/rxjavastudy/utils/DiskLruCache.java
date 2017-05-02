@@ -212,6 +212,10 @@ public final class DiskLruCache implements Closeable {
      * @throws java.io.EOFException if the stream is exhausted before the next newline
      *     character.
      */
+    /**
+     * 读取一行文件内容
+     * @throws IOException 如果InputStream在回车符之前已经结束，则抛出IOException.
+     */
     public static String readAsciiLine(InputStream in) throws IOException {
         // TODO: support UTF-8 here instead
 
@@ -304,6 +308,14 @@ public final class DiskLruCache implements Closeable {
      * @param maxSize the maximum number of bytes this cache should use to store
      * @throws java.io.IOException if reading or writing the cache directory fails
      */
+    /**
+     * 使用指定的目录 {@code directory} 来创建硬盘缓存.
+     * @param directory 可写的目录
+     * @param appVersion 应用版本号，一般传1
+     * @param valueCount 一个key可以对应多少个缓存文件,一般传1
+     * @param maxSize 硬盘缓存的最大容量,单位是byte
+     * @throws IOException
+     */
     public static DiskLruCache open(File directory, int appVersion, int valueCount, long maxSize)
             throws IOException {
         if (maxSize <= 0) {
@@ -336,6 +348,10 @@ public final class DiskLruCache implements Closeable {
         return cache;
     }
 
+    /**
+     * 读取journal文件
+     * @throws IOException 读取异常抛出IOException
+     */
     private void readJournal() throws IOException {
         InputStream in = new BufferedInputStream(new FileInputStream(journalFile), IO_BUFFER_SIZE);
         try {
@@ -422,6 +438,9 @@ public final class DiskLruCache implements Closeable {
     /**
      * Creates a new journal that omits redundant information. This replaces the
      * current journal if it exists.
+     */
+    /**
+     * 创建journal文件。如果该文件已经存在，则替换它.
      */
     private synchronized void rebuildJournal() throws IOException {
         if (journalWriter != null) {
@@ -783,6 +802,9 @@ public final class DiskLruCache implements Closeable {
          * Returns an unbuffered input stream to read the last committed value,
          * or null if no value has been committed.
          */
+        /**
+         * 获取缓存文件的输出流
+         */
         public InputStream newInputStream(int index) throws IOException {
             synchronized (DiskLruCache.this) {
                 if (entry.currentEditor != this) {
@@ -810,6 +832,9 @@ public final class DiskLruCache implements Closeable {
          * when writing to the filesystem, this edit will be aborted when
          * {@link #commit} is called. The returned output stream does not throw
          * IOExceptions.
+         */
+        /**
+         * 获取缓存文件的输入流
          */
         public OutputStream newOutputStream(int index) throws IOException {
             synchronized (DiskLruCache.this) {
@@ -913,6 +938,9 @@ public final class DiskLruCache implements Closeable {
             this.lengths = new long[valueCount];
         }
 
+        /**
+         * 获取缓存文件的大小.
+         */
         public String getLengths() throws IOException {
             StringBuilder result = new StringBuilder();
             for (long size : lengths) {
@@ -942,10 +970,16 @@ public final class DiskLruCache implements Closeable {
             throw new IOException("unexpected journal line: " + Arrays.toString(strings));
         }
 
+        /**
+         * 硬盘缓存文件
+         */
         public File getCleanFile(int i) {
             return new File(directory, key + "." + i);
         }
 
+        /**
+         * 硬盘缓存临时文件
+         */
         public File getDirtyFile(int i) {
             return new File(directory, key + "." + i + ".tmp");
         }
