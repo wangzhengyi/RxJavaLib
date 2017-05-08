@@ -25,6 +25,7 @@ import rxjava.android.com.rxjavastudy.chapter7.LongTaskFragment;
 import rxjava.android.com.rxjavastudy.chapter7.NetworkTaskFragment;
 import rxjava.android.com.rxjavastudy.chapter7.SharedPreferencesListFragment;
 import rxjava.android.com.rxjavastudy.chapter9.PhoneWallFragment;
+import rxjava.android.com.rxjavastudy.chapter9.RxDownloadFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
 import rxjava.android.com.rxjavastudy.interfaces.NavigationDrawerCallbacks;
 
@@ -158,6 +159,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .replace(R.id.container, new PhoneWallFragment())
                         .commit();
                 break;
+            case 19:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new RxDownloadFragment())
+                        .commit();
             default:
                 break;
         }
