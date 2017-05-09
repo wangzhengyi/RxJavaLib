@@ -9,7 +9,10 @@ import com.wzy.rxdownload.BuildConfig;
 import com.wzy.rxdownload.entity.DownloadRange;
 import com.wzy.rxdownload.entity.DownloadStatus;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
@@ -18,6 +21,7 @@ import java.nio.channels.FileChannel;
 import java.text.ParseException;
 
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 import rx.Subscriber;
 
 public class FileHelper {
@@ -125,6 +129,44 @@ public class FileHelper {
         }
     }
 
+    void saveFile(Subscriber<? super DownloadStatus> subscriber, File saveFile, Response<ResponseBody> response) {
+        BufferedInputStream bin = null;
+        BufferedOutputStream bout = null;
+
+        try {
+            int readLen;
+            int downloadSize = 0;
+            byte[] buffer = new byte[8192];
+
+            DownloadStatus status = new DownloadStatus();
+            bin = new BufferedInputStream(response.body().byteStream());
+            bout = new BufferedOutputStream(new FileOutputStream(saveFile));
+
+            long contentLength = response.body().contentLength();
+            boolean isChunked = Utils.isChunked(response);
+            if (isChunked || contentLength == -1) {
+                status.isChunked = true;
+            }
+            status.setTotalSize(contentLength);
+
+            while ((readLen = bin.read(buffer)) != -1) {
+                bout.write(buffer, 0, readLen);
+                downloadSize += readLen;
+                status.setDownloadSize(downloadSize);
+                subscriber.onNext(status);
+            }
+            bout.flush();
+            Log.d(TAG, "saveFile: Normal download completed!");
+            subscriber.onCompleted();
+        } catch (IOException e) {
+            e.printStackTrace();
+            subscriber.onError(e);
+        } finally {
+            Utils.closeQuietly(bin);
+            Utils.closeQuietly(bout);
+        }
+    }
+
     void saveFile(Subscriber<? super DownloadStatus> subscriber, int i, long start, long end,
                   File tempFile, File saveFile, ResponseBody responseBody) {
         RandomAccessFile record = null;
@@ -172,6 +214,21 @@ public class FileHelper {
         }
     }
 
+    void prepareDownload(File lastModifyFile, File saveFile, long fileLength, String lastModify) throws IOException, ParseException {
+        writeLastModify(lastModifyFile, lastModify);
+        RandomAccessFile save = null;
+        try {
+            save = new RandomAccessFile(saveFile, "rws");
+            if (fileLength != -1) {
+                save.setLength(fileLength);
+            } else {
+                Log.i(TAG, "prepareDownload: Chunked download.");
+            }
+        } finally {
+            Utils.closeQuietly(save);
+        }
+    }
+
     void prepareDownload(File lastModifyFile, File tempFile, File saveFile, long fileLength, String lastModify) throws IOException, ParseException {
         writeLastModify(lastModifyFile, lastModify);
         RandomAccessFile save = null;
@@ -204,6 +261,58 @@ public class FileHelper {
         } finally {
             Utils.closeQuietly(save);
             Utils.closeQuietly(recordChannle);
+            Utils.closeQuietly(record);
+        }
+    }
+
+    String getLastModify(File file) throws IOException {
+        RandomAccessFile record = null;
+        try {
+            record = new RandomAccessFile(file, "rws");
+            record.seek(0);
+            return Utils.longToGMT(record.readLong());
+        } finally {
+            Utils.closeQuietly(record);
+        }
+    }
+
+    boolean downloadNotComplete(File tempFile) throws IOException {
+        RandomAccessFile record = null;
+        FileChannel channel = null;
+
+        try {
+            record = new RandomAccessFile(tempFile, "rws");
+            channel = record.getChannel();
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, RECORD_FILE_TOTAL_SIZE);
+            long startByte;
+            long endByte;
+
+            for (int i = 0; i < MAX_THREADS; i++) {
+                startByte = buffer.getLong();
+                endByte = buffer.getLong();
+                if (startByte < endByte) {
+                    return true;
+                }
+            }
+
+            return false;
+        } finally {
+            Utils.closeQuietly(channel);
+            Utils.closeQuietly(record);
+        }
+    }
+
+    boolean tempFileDamaged(File tempFile, long fileLength) throws IOException {
+        RandomAccessFile record = null;
+        FileChannel channel = null;
+        try {
+            record = new RandomAccessFile(tempFile, "rws");
+            channel = record.getChannel();
+            MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, RECORD_FILE_TOTAL_SIZE);
+            long recordTotalSize = buffer.getLong(RECORD_FILE_TOTAL_SIZE - 8) + 1;
+            return recordTotalSize != fileLength;
+        } finally {
+            Utils.closeQuietly(channel);
             Utils.closeQuietly(record);
         }
     }

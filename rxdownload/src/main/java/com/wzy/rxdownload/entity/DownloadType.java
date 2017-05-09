@@ -26,7 +26,39 @@ public abstract class DownloadType {
     DownloadHelper mDownloadHelper;
 
     public abstract void prepareDownload() throws IOException, ParseException;
+
     public abstract Observable<DownloadStatus> startDownload() throws IOException;
+
+    static class NormalDownload extends DownloadType {
+
+        @Override
+        public void prepareDownload() throws IOException, ParseException {
+            mDownloadHelper.prepareNormalDownload(mUrl, mFileLength, mLastModify);
+        }
+
+        @Override
+        public Observable<DownloadStatus> startDownload() throws IOException {
+            Log.d(TAG, "startDownload: Normal Download start!!");
+            return mDownloadHelper.getDownloadApi().download(null, mUrl)
+                    .subscribeOn(Schedulers.io())
+                    .flatMap(new Func1<Response<ResponseBody>, Observable<DownloadStatus>>() {
+                        @Override
+                        public Observable<DownloadStatus> call(Response<ResponseBody> response) {
+                            return normalSave(response);
+                        }
+                    });
+        }
+
+        private Observable<DownloadStatus> normalSave(final Response<ResponseBody> response) {
+            return Observable.create(new Observable.OnSubscribe<DownloadStatus>() {
+                @Override
+                public void call(Subscriber<? super DownloadStatus> subscriber) {
+                    mDownloadHelper.saveNormalFile(subscriber, mUrl, response);
+                }
+            });
+        }
+    }
+
 
     static class ContinueDownload extends DownloadType {
 
@@ -101,6 +133,43 @@ public abstract class DownloadType {
         @Override
         public Observable<DownloadStatus> startDownload() throws IOException {
             return super.startDownload();
+        }
+    }
+
+    static class AlreadyDownloaded extends DownloadType {
+
+        @Override
+        public void prepareDownload() throws IOException, ParseException {
+            Log.d(TAG, "prepareDownload: File Already downloaded!");
+        }
+
+        @Override
+        public Observable<DownloadStatus> startDownload() throws IOException {
+            return Observable.just(new DownloadStatus(mFileLength, mFileLength));
+        }
+    }
+
+    static class RequestRangeNotSatisfiable extends DownloadType {
+
+        @Override
+        public void prepareDownload() throws IOException, ParseException {
+
+        }
+
+        @Override
+        public Observable<DownloadStatus> startDownload() throws IOException {
+            return mDownloadHelper.requestHeaderWidthIfRangeByGet(mUrl)
+                    .flatMap(new Func1<DownloadType, Observable<DownloadStatus>>() {
+                        @Override
+                        public Observable<DownloadStatus> call(DownloadType downloadType) {
+                            try {
+                                downloadType.prepareDownload();
+                                return downloadType.startDownload();
+                            } catch (IOException | ParseException e) {
+                                return Observable.error(e);
+                            }
+                        }
+                    });
         }
     }
 }

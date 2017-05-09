@@ -58,6 +58,10 @@ public class RxDownloadFragment extends Fragment {
 
     private String saveName = "weixin.apk";
     private String url = "http://dldir1.qq.com/weixin/android/weixin6330android920.apk";
+
+//    private String saveName = "keep.apk";
+//    private String url = "https://dl-android.keepcdn.com/keep-latest_71785d03a16692e5a5c7bc3d6e7c85db.apk?download/keep-latest.apk";
+
     private String defaultPath = getDownloadDirectory(DOWNLOAD_DIR);
 
     private Unbinder unbinder;

@@ -59,6 +59,13 @@ public class Utils {
         return date.getTime();
     }
 
+    public static String longToGMT(long lastModify) {
+        Date d = new Date(lastModify);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf.format(d);
+    }
+
     public static String lastModify(Response<?> response) {
         return response.headers().get("Last-Modified");
     }
@@ -73,5 +80,33 @@ public class Utils {
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    public static String contentRange(Response<?> response) {
+        return response.headers().get("Content-Range");
+    }
+
+    public static String transferEncoding(Response<?> response) {
+        return response.headers().get("Transfer-Encoding");
+    }
+
+    public static boolean isChunked(Response<?> response) {
+        return "chunked".equals(transferEncoding(response));
+    }
+
+    public static boolean notSupportRange(Response<?> resp) {
+        return TextUtils.isEmpty(contentRange(resp)) || contentLength(resp) == -1 || isChunked(resp);
+    }
+
+    public static boolean serverFileChanged(Response<Void> resp) {
+        return resp.code() == 200;
+    }
+
+    public static boolean serverFileNotChange(Response<Void> resp) {
+        return resp.code() == 206;
+    }
+
+    public static boolean requestRangeNotSatisfiable(Response<Void> resp) {
+        return resp.code() == 416;
     }
 }
