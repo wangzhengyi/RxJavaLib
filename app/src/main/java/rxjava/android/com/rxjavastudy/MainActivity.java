@@ -28,6 +28,7 @@ import rxjava.android.com.rxjavastudy.chapter9.PhoneWallFragment;
 import rxjava.android.com.rxjavastudy.chapter9.RxDownloadFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
 import rxjava.android.com.rxjavastudy.interfaces.NavigationDrawerCallbacks;
+import rxjava.android.com.rxjavastudy.mvp.LoginFragment;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks{
@@ -163,6 +164,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new RxDownloadFragment())
                         .commit();
+                break;
+            case 20:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new LoginFragment())
+                        .commit();
+                break;
             default:
                 break;
         }
