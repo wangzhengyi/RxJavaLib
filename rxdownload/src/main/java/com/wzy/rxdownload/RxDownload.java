@@ -31,6 +31,11 @@ public class RxDownload {
         return this;
     }
 
+    public RxDownload maxRetryCount(int max) {
+        mDownloadHelper.setMaxRetryCount(max);
+        return this;
+    }
+
     public RxDownload context(Context context) {
         this.mContext = context;
         return this;
@@ -55,7 +60,18 @@ public class RxDownload {
         };
     }
 
-
+    /**
+     * Normal Download..
+     * <p>
+     * UnSubscribe will pause download.
+     * <p>
+     * Do not save the download record in the database.
+     *
+     * @param url      Download url
+     * @param saveName Download file name
+     * @param savePath Download file save path. If null, using default save path {@code /storage/emulated/0/Download/}
+     * @return Observable<DownloadState>
+     */
     public Observable<DownloadStatus> download(final String url, final String saveName,
                                                final String savePath) {
         return mDownloadHelper.downloadDispatcher(url, saveName, savePath, mContext, mAutoInstall);

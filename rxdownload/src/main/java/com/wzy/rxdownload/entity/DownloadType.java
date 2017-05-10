@@ -76,7 +76,7 @@ public abstract class DownloadType {
                         subscriber.onError(e);
                     }
                 }
-            }).flatMap(new Func1<DownloadRange, Observable<DownloadStatus>>() {
+            }).subscribeOn(Schedulers.io()).flatMap(new Func1<DownloadRange, Observable<DownloadStatus>>() {
 
                 @Override
                 public Observable<DownloadStatus> call(final DownloadRange downloadRange) {
@@ -90,7 +90,7 @@ public abstract class DownloadType {
                                 }
                             });
                 }
-            }).subscribeOn(Schedulers.io()).onBackpressureLatest().retry(new Func2<Integer, Throwable, Boolean>() {
+            }).onBackpressureLatest().retry(new Func2<Integer, Throwable, Boolean>() {
                 @Override
                 public Boolean call(Integer integer, Throwable throwable) {
                     //// TODO: 2017/5/8

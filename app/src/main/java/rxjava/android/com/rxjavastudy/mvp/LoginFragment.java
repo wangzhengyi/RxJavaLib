@@ -4,6 +4,8 @@ package rxjava.android.com.rxjavastudy.mvp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import rxjava.android.com.rxjavastudy.mvp.view.ILoginView;
 
 
 public class LoginFragment extends Fragment implements View.OnClickListener, ILoginView{
+    private static final String TAG = LoginFragment.class.getSimpleName();
     private EditText mNameEditText;
     private EditText mPwdEditText;
     private Button mLoginBtn;
@@ -52,6 +55,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, ILo
 
         mILoginPresenter = new LoginPresenterImpl(this);
         mILoginPresenter.setProgressBarVisibility(false);
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        float density = metrics.density;
+        int dpi = metrics.densityDpi;
+        Log.i(TAG, "onViewCreated: density = " + density + ", dpi=" + dpi);
     }
 
     @Override
