@@ -198,6 +198,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
         items.add(new NavigationItem("MVP", getResources()
                 .getDrawable(R.drawable.ic_action_android)));
+
+        items.add(new NavigationItem("RxDownloadService", getResources()
+                .getDrawable(R.drawable.ic_action_android)));
         return items;
     }
 

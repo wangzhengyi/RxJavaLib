@@ -4,7 +4,8 @@ package rxjava.android.com.rxjavastudy.utils;
 import android.widget.Button;
 import android.widget.TextView;
 
-import zlc.season.rxdownload.entity.DownloadEvent;
+import com.wzy.rxdownload.entity.DownloadEvent;
+
 
 public class DownloadController {
     private TextView mStatus;

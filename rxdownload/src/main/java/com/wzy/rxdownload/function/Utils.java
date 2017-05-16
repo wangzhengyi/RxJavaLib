@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import retrofit2.Response;
+import rx.Subscription;
 
 public class Utils {
     public static String formatSize(long size) {
@@ -108,5 +109,11 @@ public class Utils {
 
     public static boolean requestRangeNotSatisfiable(Response<Void> resp) {
         return resp.code() == 416;
+    }
+
+    public static void unSubscribe(Subscription subscription) {
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
     }
 }
