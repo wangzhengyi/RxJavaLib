@@ -25,6 +25,7 @@ import rxjava.android.com.rxjavastudy.chapter7.LongTaskFragment;
 import rxjava.android.com.rxjavastudy.chapter7.NetworkTaskFragment;
 import rxjava.android.com.rxjavastudy.chapter7.SharedPreferencesListFragment;
 import rxjava.android.com.rxjavastudy.chapter9.PhoneWallFragment;
+import rxjava.android.com.rxjavastudy.chapter9.RetrofitFragment;
 import rxjava.android.com.rxjavastudy.chapter9.RxDownloadFragment;
 import rxjava.android.com.rxjavastudy.chapter9.RxServiceFragment;
 import rxjava.android.com.rxjavastudy.fragment.NavigationDrawerFragment;
@@ -174,6 +175,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             case 21:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new RxServiceFragment())
+                        .commit();
+                break;
+            case 22:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new RetrofitFragment())
                         .commit();
                 break;
             default:
