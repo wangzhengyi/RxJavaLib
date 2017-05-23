@@ -1,1 +1,1 @@
-include ':app', ':progress', ':rxdownload', ':retrofit'
+include ':app', ':progress', ':rxdownload', ':retrofit', ':rxjava'

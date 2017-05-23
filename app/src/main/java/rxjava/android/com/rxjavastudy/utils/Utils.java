@@ -59,4 +59,8 @@ public class Utils {
             }
         }
     }
+
+    public static void testMain() {
+        int[] arr = new int[10];
+    }
 }
