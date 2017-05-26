@@ -46,6 +46,11 @@ public abstract class DownloadType {
                         public Observable<DownloadStatus> call(Response<ResponseBody> response) {
                             return normalSave(response);
                         }
+                    }).onBackpressureLatest().retry(new Func2<Integer, Throwable, Boolean>() {
+                        @Override
+                        public Boolean call(Integer integer, Throwable throwable) {
+                            return mDownloadHelper.retry(integer, throwable);
+                        }
                     });
         }
 
@@ -93,8 +98,7 @@ public abstract class DownloadType {
             }).onBackpressureLatest().retry(new Func2<Integer, Throwable, Boolean>() {
                 @Override
                 public Boolean call(Integer integer, Throwable throwable) {
-                    //// TODO: 2017/5/8
-                    return null;
+                    return mDownloadHelper.retry(integer, throwable);
                 }
             });
         }

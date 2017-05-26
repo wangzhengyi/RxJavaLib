@@ -28,10 +28,30 @@ public class Retrofit {
      * 构造网络请求的工厂类，默认是OkHttp
      */
     final okhttp3.Call.Factory callFactory;
+
+    /**
+     * 请求的url
+     */
     final HttpUrl baseUrl;
+
+    /**
+     * 请求网络得到的response的转换器的集合，默认会加入BuiltInConverters中
+     */
     final List<Converter.Factory> converterFactories;
+
+    /**
+     * 把Call对象转换为其他类型对象
+     */
     final List<CallAdapter.Factory> adapterFactories;
+
+    /**
+     * 用于执行回调的Executor.默认Android是MainThreadExecutor.
+     */
     final Executor callbackExecutor;
+
+    /**
+     * 是否需要立即解析接口中的方法.
+     */
     final boolean validateEagerly;
 
     Retrofit(okhttp3.Call.Factory callFactory, HttpUrl baseUrl,
@@ -49,7 +69,7 @@ public class Retrofit {
     public <T> T create(final Class<T> service) {
         Utils.validateServiceInterface(service);
 
-        return (T) Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{service},
+        return (T) Proxy.newProxyInstance(service.getClassLoader(), new Class<?>[]{service},
                 new InvocationHandler() {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args)
@@ -58,9 +78,25 @@ public class Retrofit {
                         if (method.getDeclaringClass() == Object.class) {
                             return method.invoke(this, args);
                         }
-                        return null;
+                        ServiceMethod<Object, Object> serviceMethod =
+                                (ServiceMethod<Object, Object>) loadServiceMethod(method);
+                        
+                         return null;
                     }
                 });
+    }
+
+    ServiceMethod<?, ?> loadServiceMethod(Method method) {
+        ServiceMethod<?, ?> result = serviceMethodCache.get(method);
+        if (result != null) return result;
+        synchronized (serviceMethodCache) {
+            result = serviceMethodCache.get(method);
+            if (result == null) {
+//                result = new ServiceMethod.Builder<>(this, method).build();
+//                serviceMethodCache.put(method, result);
+            }
+        }
+        return result;
     }
 
 
